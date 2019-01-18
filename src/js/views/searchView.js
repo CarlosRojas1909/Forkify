@@ -63,9 +63,17 @@ const renderRecipe = (recipe) => {
         elements.resultList.insertAdjacentHTML('beforeend', markup);
 
 
-}
+};
 
-export const renderResults =  (recipes) => {
 
-    recipes.forEach(renderRecipe)
-}
+// const 
+
+
+
+// export const renderPageResults =  (recipes, page =1, resPerPage = 10) => {
+
+//     const start = (page - 1) * resPerPage;// start variable hold a value of an index in the recipes array
+//     const end = page * resPerPage;// index as well
+
+//     recipes.slice(start, end).forEach(renderRecipe)
+// }

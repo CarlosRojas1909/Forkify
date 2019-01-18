@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {config} from '../keyApi';
 
 export default class Search {
 
@@ -10,7 +11,7 @@ export default class Search {
     async getResults() {
 
         const poxy = 'https://cors-anywhere.herokuapp.com/';
-        const key = '2d1566abc6cc0e8319b2469cc14c9606';
+        const key = `${config.MY_KEY1}`;
     
         try {
 
