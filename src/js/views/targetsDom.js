@@ -3,7 +3,8 @@ export const elements = {
     searchForm: document.querySelector('.search'),
     searchInput: document.querySelector('.search__field'),
     parentLoader: document.querySelector('.results'),
-    resultList: document.querySelector('.results__list')
+    resultList: document.querySelector('.results__list'),
+    buttonPages: document.querySelector('.results__pages')
 };
 
 //we create this object bc we cant not taget an element that doesn't exist in html yet

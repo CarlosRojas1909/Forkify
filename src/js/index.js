@@ -28,17 +28,29 @@ const controlSearch = async () => {
 
         //Render results in UI
         clearLoader();
-        searchView.renderResults(state.obj.result)
+        searchView.renderPageResults(state.obj.result)
         // console.log(state.obj.result)
     }
 }
-
-
 
 elements.searchForm.addEventListener('submit', event => {
 
     event.preventDefault();
     controlSearch();
+})
+
+//using evet delegation bc elemenet html is not there yet
+elements.buttonPages.addEventListener('click', event => {
+    const btn = event.target.closest('.btn-inline')
+ //   console.log(event.target)
+ // console.log(btn)
+
+    if(btn) {
+        const goToPage = parseInt(btn.dataset.goto, 10);//this is something new, dataset is mandatory and goto is our variable we created when generating out html button in searchView.js..base 10
+        searchView.clearResuts();
+        searchView.renderPageResults(state.obj.result, goToPage);
+        //console.log(goToPage)//1 or 2 or 3(page)
+    }
 })
 
 
@@ -52,8 +64,3 @@ elements.searchForm.addEventListener('submit', event => {
 
 
 
-//key from food2fork: 7ba3628f174c8dfce673bcf8158f0337 
-//search request: https://www.food2fork.com/api/search
-//recipe request: https://www.food2fork.com/api/get 
-
-//https://www.food2fork.com/api/search?key=KEY&q=chicken%20breast&page=2 

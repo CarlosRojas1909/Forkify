@@ -12,6 +12,7 @@ export const clearInput = () => {
 export const clearResuts = () => {
 
     elements.resultList.innerHTML = "";
+    elements.buttonPages.innerHTML = "";
 }
 
 /*
@@ -65,15 +66,52 @@ const renderRecipe = (recipe) => {
 
 };
 
+// creating a button to pass it in renderButton functionn. we are writing it separate to keep organized
+// data-goto: it's a new feature on html5, link a to go somewhere, data-goto (data-variableName)
+//type: 'prev' or 'next'
+const createButton = (curPage, type) => `
+        
+        <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? curPage - 1 : curPage + 1}>
+            <span>${type === 'prev' ? curPage - 1 : curPage + 1}</span>
+            <svg class="search__icon">
+                <use href="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
+            </svg>
+        </button>
 
-// const 
+    `;
+
+
+const renderButton = (curPage, numResults, resPerPage) => {
+    let button;
+
+    const totalPages  = Math.ceil(numResults / resPerPage);// 4.2->5 , 4.6->5
+    //case where we are in page 1 and totalPages is also 1 we dont want to display any button
+    if (curPage === 1 && totalPages > 1) {
+        //show only button to go next page
+        button = createButton(curPage, 'next')
+    } else if (curPage < totalPages) {
+        // show both buttons prev and next
+        button = `${createButton(curPage, 'prev')} ${createButton(curPage, 'next')}`//joining 2 strings
+
+    } else if (curPage === totalPages && totalPages > 1 ) {
+        //show buttons to go to previous pages only
+        button = createButton(curPage, 'prev')
+
+    }
+
+    elements.buttonPages.insertAdjacentHTML('afterbegin', button)
+}
 
 
 
-// export const renderPageResults =  (recipes, page =1, resPerPage = 10) => {
+export const renderPageResults =  (recipes, page =1, resPerPage = 10) => {
+    //render results of current page
 
-//     const start = (page - 1) * resPerPage;// start variable hold a value of an index in the recipes array
-//     const end = page * resPerPage;// index as well
+    const start = (page - 1) * resPerPage;// start variable hold a value of an index in the recipes array
+    const end = page * resPerPage;// index as well
 
-//     recipes.slice(start, end).forEach(renderRecipe)
-// }
+    recipes.slice(start, end).forEach(renderRecipe)
+
+    //render pagination buttons
+    renderButton(page, recipes.length, resPerPage);
+}
