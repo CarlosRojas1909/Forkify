@@ -29,13 +29,21 @@ const controlSearch = async () => {
         searchView.clearResuts();
         //icnon loader
         renderLoader(elements.parentLoader)// we are passing a html element here. never seen before
-        //Search for Recipes
-        await state.obj.getResults();//here we have an array with all the results returns a promise also so we have to await for the request, this line add a property result =[] to our brand new created obj
 
-        //Render results in UI
-        clearLoader();
-        searchView.renderPageResults(state.obj.result)
-        // console.log(state.obj.result)
+        try {
+
+            //Search for Recipes
+            await state.obj.getResults();//here we have an array with all the results returns a promise also so we have to await for the request, this line add a property result =[] to our brand new created obj
+    
+            //Render results in UI
+            clearLoader();
+            searchView.renderPageResults(state.obj.result)
+            // console.log(state.obj.result)
+
+        } catch(error) {
+            console.log('Something is wrong with the search...');
+            clearLoader();
+        }
     }
 }
 
@@ -52,6 +60,7 @@ elements.buttonPages.addEventListener('click', event => {
  // console.log(btn)
 
     if(btn) {
+
         const goToPage = parseInt(btn.dataset.goto, 10);//this is something new, dataset is mandatory and goto is our variable we created when generating out html button in searchView.js..base 10
         searchView.clearResuts();
         searchView.renderPageResults(state.obj.result, goToPage);
@@ -63,14 +72,46 @@ elements.buttonPages.addEventListener('click', event => {
 /**
  * Recipe Controller
  */
-const r = new Recipe (46956);
-r.getRecipe()
-console.log(r)
+// const r = new Recipe (46956);
+// r.getRecipe()
+// console.log(r)
 
+const controlRecipe = async () => {
 
+    const id = window.location.hash.replace("#", "");
+    // console.log(id);
 
+    if (id) {
 
+        //Create new recipe object
+        state.recipe = new Recipe(id);
+        
+        //we want to this to happends when we get a response from our req
+        try {
+            
+            //Get recipe data
+            await state.recipe.getRecipe();
+            
+            //Calculate servings and time
+            state.recipe.calcTime();
+            state.recipe.calcServings();
+            
+            //Prepare UI for changes
+            
+            //Render changes
+            console.log(state.recipe)
 
+        } catch(error) {
+            console.log('error processing recipe!');
+        }
+    }
+}
+
+// window.addEventListener('hashchange', controlRecipe);
+// //if we refresh our page, all our results will go away
+// window.addEventListener('load', controlRecipe);
+
+['hashchange', 'load'].forEach((event) => window.addEventListener(event, controlRecipe));
  
 
 
