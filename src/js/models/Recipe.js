@@ -39,8 +39,9 @@ export default class Recipe {
 
         const unitLong = ['tabelspoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons','teaspoon', 'cups', 'pounds'];
         const unitShort = ['tbsp', 'tbsp', 'oz', 'oz', 'tsp', 'tsp', 'cup', 'pound'];
+        const units = [...unitShort, 'kg', 'g']
 
-        const newIngredients = this. ingredients.map((el) =>{
+        const newIngredients = this. ingredients.map((el) => {
 
                     //uniform units/ lowercasing every ingredient 
                     let ingredient = el.toLowerCase();
@@ -49,17 +50,35 @@ export default class Recipe {
                         ingredient = ingredient.replace(cur, unitShort[index])
                         // console.log(ingredient)
                     });
+
                     //Remove Parentheses
                     ingredient = ingredient.replace(/ *\([^)]*\) */g, ' ');
 
                     //Parse ingredients into count, unit and ingredient
                     const arrIng = ingredient.split(' ');
-                    const unitIndex = arrIng.findIndex((el2) => unitShort.includes(el2));//returns index number and return -1 when can not find the el2
+                    const unitIndex = arrIng.findIndex((el2) => units.includes(el2));//returns index number and return -1 when can not find the el2
 
                     let objIng;
 
                     if (unitIndex > -1) {
+                        //Ex. 4 1/2 cups, arrCount is [4, 1/2]
+                        //Ex. 4 cups, arrCount is [4]
                         //there is a unit
+                        const arrCount = arrIng.slice(0, unitIndex);
+
+                        let count;
+                        if(arrCount.length === 1) {
+
+                            count = eval(arrIng[0].replace('-', '+'));
+                        } else {
+                            count = eval(arrIng.slice(0, unitIndex).join('+'));
+                        }
+
+                        objIng = {
+                            count,
+                            unit: arrIng[unitIndex],
+                            ingredient: arrIng.slice(unitIndex + 1).join(' ')
+                        };
 
                     } else if (parseInt(arrIng[0], 10)) {//takes 1st element in array and try to make it a number if fails, first element are letter(string)
                         //There is not unit, but 1st element is number

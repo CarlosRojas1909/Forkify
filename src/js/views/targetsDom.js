@@ -4,7 +4,8 @@ export const elements = {
     searchInput: document.querySelector('.search__field'),
     parentLoader: document.querySelector('.results'),
     resultList: document.querySelector('.results__list'),
-    buttonPages: document.querySelector('.results__pages')
+    buttonPages: document.querySelector('.results__pages'),
+    recipe: document.querySelector('.recipe')
 };
 
 //we create this object bc we cant not taget an element that doesn't exist in html yet

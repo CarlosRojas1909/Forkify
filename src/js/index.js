@@ -1,6 +1,7 @@
 
 import Search from './models/Search'
 import * as searchView from './views/searchView';
+import * as recipeView from './views/recipeView';
 import {elements, renderLoader, clearLoader} from './views/targetsDom';
 import Recipe from './models/Recipe';
 
@@ -83,15 +84,19 @@ const controlRecipe = async () => {
 
     if (id) {
 
+        //Prepare UI for changes
+        recipeView.clearRecipe();
+        renderLoader(elements.recipe);
+
         //Create new recipe object
         state.recipe = new Recipe(id);
         
         //we want to this to happends when we get a response from our req
         try {
             
-            //Get recipe data
+            //Get recipe data and parse ingredients
             await state.recipe.getRecipe();
-            
+            state.recipe.parseIngredients();
             //Calculate servings and time
             state.recipe.calcTime();
             state.recipe.calcServings();
@@ -99,7 +104,9 @@ const controlRecipe = async () => {
             //Prepare UI for changes
             
             //Render changes
-            console.log(state.recipe)
+            // console.log(state.recipe)
+            clearLoader();
+            recipeView.renderRecipe(state.recipe);
 
         } catch(error) {
             console.log('error processing recipe!');
