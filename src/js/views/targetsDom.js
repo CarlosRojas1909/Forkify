@@ -5,7 +5,8 @@ export const elements = {
     parentLoader: document.querySelector('.results'),
     resultList: document.querySelector('.results__list'),
     buttonPages: document.querySelector('.results__pages'),
-    recipe: document.querySelector('.recipe')
+    recipe: document.querySelector('.recipe'),
+    shopping: document.querySelector('.shopping__list')
 };
 
 //we create this object bc we cant not taget an element that doesn't exist in html yet
