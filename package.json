@@ -9,7 +9,7 @@
     "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development --open"
   },
-  "author": "",
+  "author": "JC Rojas",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.2.2",
