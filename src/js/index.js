@@ -2,10 +2,12 @@
 import Search from './models/Search'
 import Recipe from './models/Recipe';
 import List from './models/List';
+import Likes from './models/Likes';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
 import * as recipeView from './views/listView';
 import {elements, renderLoader, clearLoader} from './views/targetsDom';
+import Likes from './models/Likes';
 
 // Global state of app
 // Search Object 
@@ -14,7 +16,7 @@ import {elements, renderLoader, clearLoader} from './views/targetsDom';
 // Liked recipes
 
 const state = {};
-
+window.state = state;
 /**
  * Search Controller
  */
@@ -142,6 +144,60 @@ const controlList = () => {
     });
 }
 
+//Handle delete and update list item events
+elements.shopping.addEventListener('click', e => {
+    const id = e.target.closest('.shopping__item').dataset.itemid;
+
+    //handle the delete button
+    if(e.target.matches('shopping__delete, .shopping__delete *')) {
+        //delete from state
+        state.list.deleteItem(id);
+
+        //delete from UI
+        listView.deleteItem(id);
+
+      //handle the count event  
+    } else if (e.target.matches('.shopping__count-value')) {
+        const val = parseFloat(e.target.value, 10);
+        state.list.updateCount(id, val);
+    }
+})
+
+/**
+ * Like Controller
+ */
+const controlLike = () => {
+
+    if(!state.likes) state.likes = new Likes();
+    const currentID = state.recipe.id;
+ 
+    //user has not yet liked current recipe
+    if(!state.likes.isLiked(currentID)) {
+
+        //add ike to state
+        const  newLike = state.likes.addLike(
+                currentID,
+                state.recipe.title,
+                state.recipe.author,
+                state.recipe.img
+        );
+        //toggle the like button
+
+        //add like to UI list
+        console.log(state.likes)
+    //User has liked current recipe
+    } else {
+
+        //Remove like form the state
+        state.likes.deleteLike(currentId);
+        //Toggle the like button
+
+        //Remove like from UI list
+        console.log(state.likes)
+
+    }
+}
+
 
 
 
@@ -164,12 +220,16 @@ elements.recipe.addEventListener('click', event => {
 
 
     } else if (event.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
-
+        //Add ingredients to shopping list
         controlList();
-    };
+
+    } else if(event.target.matches('.recipe__love, .recipe__love *')) {
+        //Like controller
+        controlLike();
+    }
 
     // console.log(state.recipe)
-})
+});
 
 window.l = new List();
 
